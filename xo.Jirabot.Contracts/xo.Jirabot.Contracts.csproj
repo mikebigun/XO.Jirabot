@@ -4,16 +4,16 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{B77E228B-3CF8-441A-8C4F-B495E317C31B}</ProjectGuid>
-    <OutputType>Exe</OutputType>
-    <RootNamespace>xo.Jirabot.WinService</RootNamespace>
-    <AssemblyName>xo.Jirabot.WinService</AssemblyName>
+    <ProjectGuid>{1DA11262-2A31-4F71-8CE5-3AFA72E5613D}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>xo.Jirabot.Contracts</RootNamespace>
+    <AssemblyName>xo.Jirabot.Contracts</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -23,7 +23,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -42,17 +41,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Program.cs" />
+    <Compile Include="Entities\Log.cs" />
+    <Compile Include="IEntity.cs" />
+    <Compile Include="IRepository.cs" />
+    <Compile Include="IRepositoryFactory.cs" />
+    <Compile Include="ITargetDatabase.cs" />
+    <Compile Include="Logging\ILogger.cs" />
+    <Compile Include="Logging\LogType.cs" />
+    <Compile Include="Observer\IServiceObserver.cs" />
+    <Compile Include="Observer\IServiceSubject.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\xo.Jirabot.Engine\xo.Jirabot.Engine.csproj">
-      <Project>{3D5686DE-860E-4842-BDE7-F1BEACE89FCE}</Project>
-      <Name>xo.Jirabot.Engine</Name>
-    </ProjectReference>
+    <Compile Include="Requests\IRequest.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
