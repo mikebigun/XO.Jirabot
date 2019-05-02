@@ -1,5 +1,5 @@
 ﻿using System;
-using xo.Jirabot.Contracts.Entities;
+using xo.Jirabot.Contracts.Entities.Log;
 using xo.Jirabot.Contracts.Logging;
 using xo.Jirabot.Contracts.Repositories;
 

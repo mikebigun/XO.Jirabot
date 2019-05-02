@@ -10,7 +10,7 @@ namespace xo.Jirabot.Engine
             var context = EngineContext.Instance();
             var logger = context.Logger;
 
-            logger.WriteDebug("This is first debug message.");       
+            //logger.WriteDebug("This is first debug message.");       
         }
     }
 }

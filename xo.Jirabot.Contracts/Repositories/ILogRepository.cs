@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using xo.Jirabot.Contracts.Entities;
+using xo.Jirabot.Contracts.Entities.Log;
 
 namespace xo.Jirabot.Contracts.Repositories
 {

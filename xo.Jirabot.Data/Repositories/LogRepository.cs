@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using xo.Jirabot.Contracts;
-using xo.Jirabot.Contracts.Entities;
+using xo.Jirabot.Contracts.Entities.Log;
 using xo.Jirabot.Contracts.Repositories;
 
 namespace xo.Jirabot.Data.Repositories
