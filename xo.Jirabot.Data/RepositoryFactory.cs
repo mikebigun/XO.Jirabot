@@ -13,20 +13,20 @@ namespace xo.Jirabot.Data
             __database = database;
         }
 
-        public IRepository<T> CreateRepository<T>() where T: IEntity
+        public T Get<T>() where T: IRepository
         {
             try
             {
                 var type = AppDomain.CurrentDomain.GetAssemblies()
                     .SelectMany(s => s.GetTypes())
-                    .Where(p => typeof(IRepository<T>).IsAssignableFrom(p)).FirstOrDefault();
+                    .Where(p => typeof(T).IsAssignableFrom(p) && !p.IsAbstract).FirstOrDefault();
 
                 if (type == null)
                 {
                     throw new Exception("Could not resolve repository type.");
                 }
 
-                return (IRepository<T>)Activator.CreateInstance(type, __database);
+                return (T)Activator.CreateInstance(type, __database);
             }
             catch (Exception)
             {

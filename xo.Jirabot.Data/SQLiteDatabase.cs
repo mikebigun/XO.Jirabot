@@ -9,20 +9,23 @@ namespace xo.Jirabot.Data
 {
     public class SQLiteDatabase : ITargetDatabase
     {
-        private SQLiteConnection __connection = null;
+        private readonly string __connectionString = null;
 
         public SQLiteDatabase()
         {
-            __connection = new SQLiteConnection(@"Data Source=C:\xo.Jirabot\xo.Jirabot.Data\dbfile\xo.Jirabot.Db;Version=3;");
+            __connectionString = @"Data Source=C:\xo.Jirabot\xo.Jirabot.Data\dbfile\xo.Jirabot.Db;Version=3;";
         }
 
-        public int ExecuteNonQuery(string query, IDictionary<string, object> parameters = null)
+        public int ExecuteNonQuery(string query, IDictionary<string, object> parameters)
         {
             try
             {
-                using (var con = CreateOpenConnection())
+                using (var con = new SQLiteConnection(__connectionString).OpenAndReturn())
                 {
-                    return CreateCommand(con, query, parameters).ExecuteNonQuery();
+                    using (var command = CreateCommand(con, query, parameters))
+                    {
+                        return command.ExecuteNonQuery();
+                    }
                 }
             }
             catch
@@ -31,43 +34,30 @@ namespace xo.Jirabot.Data
             }
         }
 
-        public DbDataReader ExecuteReader(string query, IDictionary<string, object> parameters = null)
+        public IEnumerable<T> ExecuteReader<T>(string query, IDictionary<string, object> parameters, Func<IDataRecord, T> mapper)
         {
             try
             {
-                using (var con = CreateOpenConnection())
+                var output = new List<T>();
+
+                using (var con = new SQLiteConnection(__connectionString).OpenAndReturn())
                 {
-                    return CreateCommand(con, query, parameters).ExecuteReader();
+                    using (var command = CreateCommand(con, query, parameters))
+                    {                        
+                        var reader =  command.ExecuteReader();
+
+                        while (reader.Read())
+                        {
+                            output.Add(mapper.Invoke(reader));
+                        }
+                    }
                 }
+                return output;
             }
             catch
             {
                 throw;
             }
-        }
-
-        public object ExecuteScalar(string query, IDictionary<string, object> parameters = null)
-        {
-            try
-            {
-                using (var con = CreateOpenConnection())
-                {
-                    return CreateCommand(con, query, parameters).ExecuteScalar();
-                }
-            }
-            catch
-            {
-                throw;
-            }
-        }
-
-        private SQLiteConnection CreateOpenConnection()
-        {
-            if (__connection.State != ConnectionState.Open)
-            {
-                __connection.Open();
-            }
-            return __connection;
         }
 
         private SQLiteCommand CreateCommand(SQLiteConnection connection, string query, IDictionary<string, object> parameters = null)
@@ -100,7 +90,7 @@ namespace xo.Jirabot.Data
                     DbType = MapParameterType(parameter.Value.GetType()),
                     Direction = ParameterDirection.Input,
                     ParameterName = parameter.Key,
-                    Value = parameter.Value == null ? DBNull.Value : parameter.Value
+                    Value = parameter.Value ?? DBNull.Value
                 });
             }
         }

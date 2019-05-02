@@ -1,22 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using xo.Jirabot.Contracts;
 using xo.Jirabot.Contracts.Entities;
+using xo.Jirabot.Contracts.Repositories;
 
 namespace xo.Jirabot.Data.Repositories
 {
-    internal class LogRepository : IRepository<Log>
+    internal class LogRepository : BaseRepository<Log>, ILogRepository
     {
-        private ITargetDatabase __database;
-
-        public LogRepository(ITargetDatabase database)
+        public LogRepository(ITargetDatabase database) : base(database)
         {
-            __database = database;
         }
 
         public void Create(Log entity)
         {
-            __database.ExecuteNonQuery("INSERT INTO Log (LogType, LogMessage, LogDate) VALUES (@LogType, @LogMessage, @LogDate)", 
+            base.Update("INSERT INTO Log (LogType, LogMessage, LogDate) VALUES (@LogType, @LogMessage, @LogDate)",
                 new Dictionary<string, object>
                 {
                     { "@LogType", entity.LogType },
@@ -25,49 +24,21 @@ namespace xo.Jirabot.Data.Repositories
                 });
         }
 
-        public void Delete(Log entity)
+        public IEnumerable<Log> GetTopLogs(int top)
         {
-            __database.ExecuteNonQuery("DELETE FROM Log WHERE Id = @Id", 
-                new Dictionary<string, object>
-                {
-                    { "@Id", entity.Id }
-                });
+            return base.Get($"SELECT Id, LogType, LogMessage, LogDate FROM Log ORDER BY Id DESC LIMIT { top }");
         }
 
-        public Log GetById(int id)
+        protected override Log MapEntity(IDataRecord record)
         {
-            using (var dr = __database.ExecuteReader(
-                "SELECT Id, LogType, LogMessage, LogDate FROM Log WHERE Id = @Id", new Dictionary<string, object> { { "@Id", id } }))
+            var entity = new Log
             {
-                if (dr.HasRows)
-                {
-                    return new Log
-                    {
-                        Id = dr.GetInt32(0),
-                        LogType = dr.GetInt32(1),
-                        LogMessage = dr.GetString(2),
-                        LogDate = Convert.ToDateTime(dr.GetString(3))
-                    };
-                }
-            }
-            return null;
-        }
-
-        public IEnumerable<Log> GetMany(string query)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Update(Log entity)
-        {
-            __database.ExecuteNonQuery("UPDATE Log SET LogType = @LogType, @LogMessage = @LogMessage, @LogDate = @LogDate WHERE @Id = @Id",
-                new Dictionary<string, object>
-                {
-                    { "@LogType", entity.LogType },
-                    { "@LogMessage", entity.LogMessage },
-                    { "@LogDate", entity.LogDate.ToString() },
-                    { "@Id", entity.Id }
-                });
+                Id = Convert.ToInt32(record["Id"]),
+                LogDate = Convert.ToDateTime(record["LogDate"]),
+                LogType = Convert.ToInt32(record["LogType"]),
+                LogMessage = record["LogMessage"].ToString()
+            };
+            return entity;
         }
     }
 }

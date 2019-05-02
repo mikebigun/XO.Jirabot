@@ -1,17 +1,17 @@
 ﻿using System;
-using xo.Jirabot.Contracts;
 using xo.Jirabot.Contracts.Entities;
 using xo.Jirabot.Contracts.Logging;
+using xo.Jirabot.Contracts.Repositories;
 
 namespace xo.Jirabot.Engine.Logging
 {
     public class Logger : ILogger
     {
-        private IRepository<Log> __repo = null;
+        private ILogRepository __repo = null;
 
         public Logger()
         {
-            __repo = EngineContext.Instance().Factory.CreateRepository<Log>();
+            __repo = EngineContext.Instance().Factory.Get<ILogRepository>();
         }
 
         public void WriteDebug(string message)

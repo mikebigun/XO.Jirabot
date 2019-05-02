@@ -43,7 +43,6 @@
   <ItemGroup>
     <Compile Include="Entities\Log.cs" />
     <Compile Include="IEntity.cs" />
-    <Compile Include="IRepository.cs" />
     <Compile Include="IRepositoryFactory.cs" />
     <Compile Include="ITargetDatabase.cs" />
     <Compile Include="Logging\ILogger.cs" />
@@ -51,6 +50,8 @@
     <Compile Include="Observer\IServiceObserver.cs" />
     <Compile Include="Observer\IServiceSubject.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Repositories\ILogRepository.cs" />
+    <Compile Include="IRepository.cs" />
     <Compile Include="Requests\IRequest.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
