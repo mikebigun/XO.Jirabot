@@ -23,12 +23,12 @@ namespace xo.Jirabot.Data.Repositories
             return __database.ExecuteReader(query, parameters, MapEntity);
         }
 
-        protected int Update(string query)
+        protected int Post(string query)
         {
-            return Update(query, null);
+            return Post(query, null);
         }
 
-        protected int Update(string query, IDictionary<string, object> parameters)
+        protected int Post(string query, IDictionary<string, object> parameters)
         {
             return __database.ExecuteNonQuery(query, parameters);
         }

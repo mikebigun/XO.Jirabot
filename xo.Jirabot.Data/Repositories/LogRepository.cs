@@ -15,7 +15,7 @@ namespace xo.Jirabot.Data.Repositories
 
         public void Create(Log entity)
         {
-            base.Update("INSERT INTO Log (LogType, LogMessage, LogDate) VALUES (@LogType, @LogMessage, @LogDate)",
+            base.Post("INSERT INTO Log (LogType, LogMessage, LogDate) VALUES (@LogType, @LogMessage, @LogDate)",
                 new Dictionary<string, object>
                 {
                     { "@LogType", entity.LogType },
