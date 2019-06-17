@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace xo.Jirabot.Contracts.Entities.Jira
 {
-    public class JiraQuery : IEntity
+    public class JiraRequest : IEntity
     {
         public int Id { get; set; }
 
@@ -15,5 +15,9 @@ namespace xo.Jirabot.Contracts.Entities.Jira
         public string Description { get; set; }
 
         public string Query { get; set; }
+
+        public string Conditions { get; set; }
+
+        public string Frequency { get; set; }
     }
 }

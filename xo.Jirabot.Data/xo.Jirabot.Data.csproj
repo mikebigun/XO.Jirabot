@@ -49,13 +49,12 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\BaseRepository.cs" />
+    <Compile Include="Repositories\TaskRepository.cs" />
     <Compile Include="RepositoryFactory.cs" />
     <Compile Include="Repositories\LogRepository.cs" />
     <Compile Include="SQLiteDatabase.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="dbfile\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\xo.Jirabot.Contracts\xo.Jirabot.Contracts.csproj">
       <Project>{1DA11262-2A31-4F71-8CE5-3AFA72E5613D}</Project>
@@ -72,6 +71,9 @@
     <PackageReference Include="System.Data.SQLite.Linq">
       <Version>1.0.110</Version>
     </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App_Data\xo.Jirabot.Db" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
 using System.Data.SQLite;
+using System.Diagnostics;
 using xo.Jirabot.Contracts;
 
 namespace xo.Jirabot.Data
@@ -13,7 +14,7 @@ namespace xo.Jirabot.Data
 
         public SQLiteDatabase()
         {
-            __connectionString = @"Data Source=C:\xo.Jirabot\xo.Jirabot.Data\dbfile\xo.Jirabot.Db;Version=3;";
+            __connectionString = @"Data Source=C:\Work\Repo\XO.Jirabot\xo.Jirabot.Data\App_Data\xo.Jirabot.Db;Version=3;";
         }
 
         public int ExecuteNonQuery(string query, IDictionary<string, object> parameters)
@@ -28,9 +29,11 @@ namespace xo.Jirabot.Data
                     }
                 }
             }
-            catch
+            catch (Exception exception)
             {
-                throw;
+                Trace.TraceError(exception.ToString());
+
+                throw exception;
             }
         }
 
@@ -54,9 +57,11 @@ namespace xo.Jirabot.Data
                 }
                 return output;
             }
-            catch
+            catch (Exception exception)
             {
-                throw;
+                Trace.TraceError(exception.ToString());
+
+                throw exception;
             }
         }
 
