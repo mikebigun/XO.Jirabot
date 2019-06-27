@@ -8,6 +8,7 @@ namespace xo.Jirabot.WinService
 {
     class Program
     {
+        [STAThread]
         static void Main(string[] args)
         {
             var factory = HostFactory.Run(host =>

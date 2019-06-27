@@ -13,44 +13,64 @@ namespace xo.Jirabot.WinService.Service
 
         private EngineContext __context = EngineContext.Instance();
 
+        private EngineExecutor  __engine;
+
         public ServiceRunner()
         {
         }
 
-        public void Continued()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Pause()
-        {
-            Parallel.ForEach(GetRunners(), run => run.Cancel());
-        }
-
-        public void ShutDown()
-        {
-            Parallel.ForEach(GetRunners(), run => run.Cancel());
-        }
-
         public void Start()
         {
-            Parallel.ForEach(GetRunners(), async run => await HandleRun(run));
+            StartInternal();
+        }
+
+        public void Continued()
+        {
+            StartInternal();
         }
 
         public void Stop()
         {
-            Parallel.ForEach(GetRunners(), run => run.Cancel());
+            StopInternal();
         }
 
-        private async Task HandleRun(PeriodicTask task)
+        public void Pause()
         {
-            try
+            StopInternal();
+        }
+
+        public void ShutDown()
+        {
+            StopInternal();
+        }
+
+        private void StartInternal()
+        {
+            var loop = Parallel.ForEach(GetRunners(), async run =>
             {
-                await task.Run();
+                try
+                {
+                    await run.Run();
+                }
+                catch (Exception ex)
+                {
+                    __context.Logger.WriteError(ex.Message);
+                }
+            });
+
+            if (loop.IsCompleted)
+            {
+                __context.Logger.WriteInfo("Service started.");
             }
-            catch (Exception ex)
+        }
+
+        private void StopInternal()
+        {
+            var loop = Parallel.ForEach(GetRunners(), run => run.Cancel());
+
+            if (loop.IsCompleted)
             {
-                __context.Logger.WriteError(ex.Message);
+                __context.Logger.WriteInfo("Service stopped.");
             }
         }
 
@@ -60,35 +80,37 @@ namespace xo.Jirabot.WinService.Service
             {
                 new PeriodicTask
                 {
+                    Name = "Jira Tasks Executor",
                     Action = ObserveJira,
                     Period = TimeSpan.FromMinutes(1),
-                    CancelationCallback = () => OnServiceJiraCancelation()
+                    CancelationCallback = () => OnServiceJiraCanceled()
                 },
                 new PeriodicTask
                 {
+                    Name = "Mattermost Tasks Executor",
                     Action = ObserveMattermost,
                     Period = TimeSpan.FromMinutes(2),
-                    CancelationCallback = () => OnServiceMattermostCancelation()
+                    CancelationCallback = () => OnServiceMattermostCanceled()
                 }
             });
         }
 
         private void ObserveJira()
         {
-
+            __engine.RunJiraObserver();
         }
 
         private void ObserveMattermost()
         {
-
+            __engine.RunMattermostObserver();
         }
 
-        private void OnServiceJiraCancelation()
+        private void OnServiceJiraCanceled()
         {
             __context.Logger.WriteInfo("Jira observer stopped. Service is not running.");
         }
 
-        private void OnServiceMattermostCancelation()
+        private void OnServiceMattermostCanceled()
         {
             __context.Logger.WriteInfo("Mattermost observer stopped. Service is not running.");
         }

@@ -41,7 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Engine.cs" />
+    <Compile Include="EngineExecutor.cs" />
     <Compile Include="EngineContext.cs" />
     <Compile Include="EngineResolver.cs" />
     <Compile Include="EngineResolverModule.cs" />

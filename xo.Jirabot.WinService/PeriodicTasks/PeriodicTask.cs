@@ -8,6 +8,8 @@ namespace xo.Jirabot.WinService.PeriodicTasks
     {
         private CancellationTokenSource __source = new CancellationTokenSource();
 
+        public string Name { get; set; }
+
         public TimeSpan Period { get; set; }
 
         public Action Action { get; set; }        
@@ -35,8 +37,6 @@ namespace xo.Jirabot.WinService.PeriodicTasks
                 __source.Token.Register(() => CancelationCallback());
             }
 
-            __source.Token.ThrowIfCancellationRequested();
-
             await Run(__source.Token);
         }
 
@@ -47,13 +47,18 @@ namespace xo.Jirabot.WinService.PeriodicTasks
                 await Task.Delay(Period, cancelationToken);
 
                 if (!cancelationToken.IsCancellationRequested)
+                {
                     Action();
+                }
             }
         }
 
         public void Cancel()
         {
-            __source.Cancel();
+            if (!__source.IsCancellationRequested)
+            {
+                __source.Cancel();
+            }
         }
 
         public void Dispose()

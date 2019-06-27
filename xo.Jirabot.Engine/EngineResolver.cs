@@ -4,7 +4,7 @@ using System.Reflection;
 
 namespace xo.Jirabot.Engine
 {
-    public class EngineResolver
+    internal class EngineResolver
     {
         private static StandardKernel _kernel = new StandardKernel();
 
