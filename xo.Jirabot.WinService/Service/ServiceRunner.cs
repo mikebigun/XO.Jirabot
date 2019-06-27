@@ -48,9 +48,9 @@ namespace xo.Jirabot.WinService.Service
             {
                 await task.Run();
             }
-            catch (TaskCanceledException)
+            catch (Exception ex)
             {
-
+                __context.Logger.WriteError(ex.Message);
             }
         }
 
