@@ -8,7 +8,7 @@ namespace xo.Jirabot.Contracts.Repositories
 {
     public interface ITaskReporsitory : IRepository
     {
-        Task GetLatestTaskByRequest(int request);
+        Task GetLatestTaskByReference(int reference);
 
         void CreateTask(Task task);
 

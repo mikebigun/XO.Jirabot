@@ -1,7 +1,9 @@
-﻿using xo.Jirabot.Contracts;
+﻿using System;
+using xo.Jirabot.Contracts;
 using xo.Jirabot.Contracts.Entities;
 using xo.Jirabot.Contracts.Entities.Tasks;
 using xo.Jirabot.Contracts.Repositories;
+using xo.Jirabot.Engine.Helpers;
 
 namespace xo.Jirabot.Engine
 {
@@ -44,16 +46,28 @@ namespace xo.Jirabot.Engine
             {
                 foreach (var query in queries)
                 {
-                    __taskRepositor.CreateTask(new Task
+                    var task = __taskRepositor.GetLatestTaskByReference(query.Id);
+
+                    if (task == null)
                     {
-                        Type = TaskType.JIRA,
-                        Status = TaskStatus.PLANNED,
-                        Request = query.Id
-                    });
+                        continue;
+                    }
+
+                    if (FrequencyHelper.MinutesDiffToNow(Convert.ToInt64(task.RunTicks)) >= 
+                        Convert.ToInt32(query.Frequency))
+                    {
+                        __taskRepositor.CreateTask(new Task
+                        {
+                            Type = TaskType.JIRA,
+                            Status = TaskStatus.PLANNED,
+                            RunTicks = DateTime.Now.Ticks.ToString(),
+                            Reference = query.Id
+                        });
+                    }
                 }
             }
 
-            // create jira task for every query, (every 15 mins)
+            // create jira task for every query, (every 1 min)
         }
     }
 }

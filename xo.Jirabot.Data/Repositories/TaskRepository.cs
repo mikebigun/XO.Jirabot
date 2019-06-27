@@ -16,23 +16,23 @@ namespace xo.Jirabot.Data.Repositories
 
         public void CreateTask(Task task)
         {
-            base.Post("INSERT INTO Tasks (Type, Status, Request) VALUES (@Type, @Status, @Request)",
+            base.Post("INSERT INTO Tasks (Type, Status, Reference) VALUES (@Type, @Status, @Reference)",
                 new Dictionary<string, object>
                 {
                     { "@Type", (int)task.Type },
                     { "@Status", (int)task.Status },
-                    { "@Request", task.Request }
+                    { "@Reference", task.Reference }
                 });
         }
 
-        public Task GetLatestTaskByRequest(int request)
+        public Task GetLatestTaskByReference(int reference)
         {
             return
-                base.Get("SELECT Id, Status, Type, Request FROM Tasks WHERE Status = @Status AND Request = @Request ORDER BY Id", 
+                base.Get("SELECT Id, Status, Type, Reference, RunTicks FROM Tasks WHERE Status = @Status AND Reference = @Reference ORDER BY Id", 
                 new Dictionary<string, object>
                 {
                     { "@Status", (int)TaskStatus.COMPLETED },
-                    { "@Request", request }
+                    { "@Reference", reference }
                 }).FirstOrDefault();
         }
 
@@ -52,7 +52,8 @@ namespace xo.Jirabot.Data.Repositories
                 Id = Convert.ToInt32(record["Id"]),
                 Status = (TaskStatus)Convert.ToInt32(record["Status"]),
                 Type = (TaskType)Convert.ToInt32(record["Type"]),
-                Request = Convert.ToInt32(record["Request"])
+                Reference = Convert.ToInt32(record["Reference"]),
+                RunTicks = record["RunTicks"].ToString()
             };
         }
     }

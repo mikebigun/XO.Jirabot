@@ -45,6 +45,7 @@
     <Compile Include="EngineContext.cs" />
     <Compile Include="EngineResolver.cs" />
     <Compile Include="EngineResolverModule.cs" />
+    <Compile Include="Helpers\FrequencyHelper.cs" />
     <Compile Include="Logging\Logger.cs" />
     <Compile Include="Observers\EngineObserver.cs" />
     <Compile Include="Observers\EngineSubject.cs" />

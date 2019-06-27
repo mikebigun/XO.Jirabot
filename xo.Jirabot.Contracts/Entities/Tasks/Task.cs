@@ -13,6 +13,8 @@ namespace xo.Jirabot.Contracts.Entities.Tasks
 
         public TaskStatus Status { get; set; }
 
-        public int Request { get; set; }
+        public string RunTicks { get; set; }
+
+        public int Reference { get; set; }
     }
 }
