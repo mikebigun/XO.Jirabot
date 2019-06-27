@@ -13,7 +13,7 @@ namespace xo.Jirabot.WinService.Service
 
         private EngineContext __context = EngineContext.Instance();
 
-        private EngineExecutor  __engine;
+        private EngineExecutor __engine = new EngineExecutor();
 
         public ServiceRunner()
         {
@@ -54,13 +54,13 @@ namespace xo.Jirabot.WinService.Service
                 }
                 catch (Exception ex)
                 {
-                    __context.Logger.WriteError(ex.Message);
+                    __context.Logger.WriteError(ex.ToString());
                 }
             });
 
             if (loop.IsCompleted)
             {
-                __context.Logger.WriteInfo("Service started.");
+                __context.Logger.WriteInfo("Service started successfully.");
             }
         }
 
@@ -70,7 +70,7 @@ namespace xo.Jirabot.WinService.Service
 
             if (loop.IsCompleted)
             {
-                __context.Logger.WriteInfo("Service stopped.");
+                __context.Logger.WriteInfo("Service stopped successfully.");
             }
         }
 
