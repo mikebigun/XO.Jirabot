@@ -54,7 +54,9 @@
     <Compile Include="Repositories\LogRepository.cs" />
     <Compile Include="SQLiteDatabase.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Content Include="SQLite.Interop.dll" />
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\xo.Jirabot.Contracts\xo.Jirabot.Contracts.csproj">
       <Project>{1DA11262-2A31-4F71-8CE5-3AFA72E5613D}</Project>

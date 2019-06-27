@@ -1,9 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using xo.Jirabot.Engine;
+using System.Diagnostics;
+using Topshelf;
+using xo.Jirabot.WinService.Contracts;
+using xo.Jirabot.WinService.Service;
 
 namespace xo.Jirabot.WinService
 {
@@ -11,15 +10,34 @@ namespace xo.Jirabot.WinService
     {
         static void Main(string[] args)
         {
-            var e = new Engine.Engine();
-            e.GetSheduledTask();
+            var factory = HostFactory.Run(host =>
+            {
+                host.Service<IServiceRunner>(service =>
+                {
+                    service.ConstructUsing(name => new ServiceRunner());
+                    service.WhenStarted(s => s.Start());
+                    service.WhenStopped(s => s.Stop());
+                    service.WhenPaused(s => s.Pause());
+                    service.WhenContinued(s => s.Continued());
+                    service.WhenShutdown(s => s.ShutDown());
+                });
 
+                host.OnException(ex => OnServiceException(ex));
 
-            // on tick
-            // send jira requests one by one with some intervals
-            // on response, notify observers 
-            // observer is a mattermost user
-            // on update, use mattermost API to send request
+                host.RunAsPrompt();
+
+                host.SetDescription("XO Jira Bot Win Service");
+                host.SetDisplayName("XO Jira Bot");
+                host.SetServiceName("XO.Jirabot");
+            });
+
+            var exitCode = (int)Convert.ChangeType(factory, factory.GetTypeCode());
+            Environment.ExitCode = exitCode;
+        }
+
+        private static void OnServiceException(Exception ex)
+        {
+            Trace.TraceError(ex.Message);
         }
     }
 }

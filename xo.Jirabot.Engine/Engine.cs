@@ -5,6 +5,16 @@ namespace xo.Jirabot.Engine
 {
     public class Engine
     {
+        public void RunJiraObserver()
+        {
+
+        }
+
+        public void RunMattermostObserver()
+        {
+
+        }
+
         public void GetSheduledTask()
         {
             var context = EngineContext.Instance();
