@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using xo.Jirabot.Engine;
 using xo.Jirabot.WinService.Contracts;
-using xo.Jirabot.WinService.PeriodicTasks;
+using xo.Jirabot.WinService.PeriodicJobs;
 
 namespace xo.Jirabot.WinService.Service
 {
     public class ServiceRunner : IServiceRunner
     {
-        private IList<PeriodicTask> __runners;
+        private IList<PeriodicJob> __jobs;
 
         private EngineContext __context = EngineContext.Instance();
 
@@ -46,7 +46,7 @@ namespace xo.Jirabot.WinService.Service
 
         private void StartInternal()
         {
-            var loop = Parallel.ForEach(GetRunners(), async run =>
+            var loop = Parallel.ForEach(GetJobs(), async run =>
             {
                 try
                 {
@@ -66,7 +66,7 @@ namespace xo.Jirabot.WinService.Service
 
         private void StopInternal()
         {
-            var loop = Parallel.ForEach(GetRunners(), run => run.Cancel());
+            var loop = Parallel.ForEach(GetJobs(), job => job.Cancel());
 
             if (loop.IsCompleted)
             {
@@ -74,25 +74,25 @@ namespace xo.Jirabot.WinService.Service
             }
         }
 
-        private IList<PeriodicTask> GetRunners()
+        private IList<PeriodicJob> GetJobs()
         {
-            return __runners ?? (__runners = new List<PeriodicTask>
+            return __jobs ?? (__jobs = new List<PeriodicJob>
             {
-                new PeriodicTask
+                new PeriodicJob
                 {
-                    Name = "Tasks Demand Creator",
-                    Action = ObserveDemand,
+                    Name = "Sheduled Tasks Creator",
+                    Action = ObserveSchedules,
                     Period = TimeSpan.FromMinutes(30),
                     CancelationCallback = () => OnServiceDemandCanceled()
                 },
-                new PeriodicTask
+                new PeriodicJob
                 {
                     Name = "Jira Task Executor",
                     Action = ObserveJira,
                     Period = TimeSpan.FromSeconds(30),
                     CancelationCallback = () => OnServiceJiraCanceled()
                 },
-                new PeriodicTask
+                new PeriodicJob
                 {
                     Name = "Mattermost Task Executor",
                     Action = ObserveMattermost,
@@ -102,9 +102,9 @@ namespace xo.Jirabot.WinService.Service
             });
         }
 
-        private void ObserveDemand()
+        private void ObserveSchedules()
         {
-            __engine.RunDemandObserver();
+            __engine.RunSchedulesObserver();
         }
 
         private void ObserveJira()

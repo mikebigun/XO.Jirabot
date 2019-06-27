@@ -2,9 +2,9 @@
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace xo.Jirabot.WinService.PeriodicTasks
+namespace xo.Jirabot.WinService.PeriodicJobs
 {
-    public class PeriodicTask : IDisposable
+    public class PeriodicJob : IDisposable
     {
         private CancellationTokenSource __source = new CancellationTokenSource();
 
@@ -16,7 +16,7 @@ namespace xo.Jirabot.WinService.PeriodicTasks
 
         public Action CancelationCallback { private get; set; }
 
-        public PeriodicTask()
+        public PeriodicJob()
         {
         }
 

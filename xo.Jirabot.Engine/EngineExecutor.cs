@@ -36,7 +36,7 @@ namespace xo.Jirabot.Engine
             // run mattermost api
         }
 
-        public void RunDemandObserver()
+        public void RunSchedulesObserver()
         {
             var queries = _jiraRepository.GetAllQueries();
 
