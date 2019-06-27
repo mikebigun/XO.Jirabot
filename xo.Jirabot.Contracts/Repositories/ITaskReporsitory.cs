@@ -6,10 +6,12 @@ using xo.Jirabot.Contracts.Entities.Tasks;
 
 namespace xo.Jirabot.Contracts.Repositories
 {
-    public interface ITaskReporsitory
+    public interface ITaskReporsitory : IRepository
     {
-        void UpdateStatus(TaskStatus status);
+        Task GetLatestTaskByRequest(int request);
 
-        void ClearPendingTasks();
+        void CreateTask(Task task);
+
+        void UpdateStatus(int id, TaskStatus status);
     }
 }

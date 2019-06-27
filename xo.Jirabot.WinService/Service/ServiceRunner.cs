@@ -80,19 +80,31 @@ namespace xo.Jirabot.WinService.Service
             {
                 new PeriodicTask
                 {
-                    Name = "Jira Tasks Executor",
+                    Name = "Tasks Demand Creator",
+                    Action = ObserveDemand,
+                    Period = TimeSpan.FromMinutes(30),
+                    CancelationCallback = () => OnServiceDemandCanceled()
+                },
+                new PeriodicTask
+                {
+                    Name = "Jira Task Executor",
                     Action = ObserveJira,
-                    Period = TimeSpan.FromMinutes(1),
+                    Period = TimeSpan.FromSeconds(30),
                     CancelationCallback = () => OnServiceJiraCanceled()
                 },
                 new PeriodicTask
                 {
-                    Name = "Mattermost Tasks Executor",
+                    Name = "Mattermost Task Executor",
                     Action = ObserveMattermost,
-                    Period = TimeSpan.FromMinutes(2),
+                    Period = TimeSpan.FromSeconds(120),
                     CancelationCallback = () => OnServiceMattermostCanceled()
                 }
             });
+        }
+
+        private void ObserveDemand()
+        {
+            __engine.RunDemandObserver();
         }
 
         private void ObserveJira()
@@ -103,6 +115,11 @@ namespace xo.Jirabot.WinService.Service
         private void ObserveMattermost()
         {
             __engine.RunMattermostObserver();
+        }
+
+        private void OnServiceDemandCanceled()
+        {
+            __context.Logger.WriteInfo("Demand observer stopped. Service is not running.");
         }
 
         private void OnServiceJiraCanceled()
