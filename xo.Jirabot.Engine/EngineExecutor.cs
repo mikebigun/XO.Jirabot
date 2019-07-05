@@ -52,9 +52,11 @@ namespace xo.Jirabot.Engine
                     
                     var latestRun = __taskRepository.GetLatestRunByReference(query.Id);
 
-                    var latestRunTime = latestRun == null ? "" : latestRun.ProcessedTime;
+                    var latestRunTime = latestRun == null ? 
+                        DateTime.Now: 
+                        latestRun.ProcessedTime.Value;
 
-                    var plannedRunTime = string.Empty;
+                    var plannedRunTime = DateTime.MinValue;
 
                     if (FrequencyHelper.IsTimeToPlan(query.Frequency, latestRunTime, out plannedRunTime))
                     {

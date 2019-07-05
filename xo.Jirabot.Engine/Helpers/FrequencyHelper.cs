@@ -1,40 +1,29 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Chronic;
-using xo.Jirabot.Contracts.Globals;
 
 namespace xo.Jirabot.Engine.Helpers
 {
     public class FrequencyHelper
     {
-        public static bool IsTimeToPlan(string frequency, string lastRun, out string plannedRun)
+        public static bool IsTimeToPlan(string frequency, DateTime lastRun, out DateTime plannedRun)
         {
-            var last = DateTime.MinValue;
-
-            if (!DateTime.TryParse(lastRun, out last))
-            {
-                throw new InvalidOperationException("Invalid last run date");
-            }
-
             var parser = new Parser();
 
             var planned = parser.Parse(frequency, new Options
             {
                  Context = Pointer.Type.Future,
-                 Clock = new Func<DateTime>(() => { return last; })
+                 Clock = new Func<DateTime>(() => { return lastRun; }),
+                 FirstDayOfWeek = DayOfWeek.Monday                 
             });
 
             if (!planned.End.HasValue)
             {
-                throw new InvalidOperationException("Invalid planned date");
+                throw new InvalidOperationException("Invalid planned date and time");
             }
 
-            plannedRun = planned.End.Value.ToString(Constants.DateTimeFormat);
+            plannedRun = planned.End.Value;
 
-            if (planned.End.Value > DateTime.Now)
+            if (plannedRun > DateTime.Now)
             {
                 return true;
             }

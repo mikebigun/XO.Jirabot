@@ -4,6 +4,7 @@ using System.Data;
 using System.Linq;
 using xo.Jirabot.Contracts;
 using xo.Jirabot.Contracts.Entities.Tasks;
+using xo.Jirabot.Contracts.Globals;
 using xo.Jirabot.Contracts.Repositories;
 
 namespace xo.Jirabot.Data.Repositories
@@ -22,13 +23,13 @@ namespace xo.Jirabot.Data.Repositories
                     { "@Type", (int)task.Type },
                     { "@Status", (int)task.Status },
                     { "@Reference", task.Reference },
-                    { "@PlannedTime", DateTime.Now.ToString("MM/DD/YYYY HH:mm") }
+                    { "@PlannedTime", task.PlannedTime.HasValue ? task.PlannedTime.Value.ToString(Constants.DateTimeFormat) : string.Empty }
                 });
         }
 
         public bool IsPlanned(int reference)
         {
-            var query = base.Get("SELECT Id WHERE Status = 'PLANNED' AND Reference = @Reference",
+            var query = base.Get("SELECT Id WHERE Status = 'PLANNED' AND Reference = @Reference LIMIT 1",
                 new Dictionary<string, object> { { "@Reference", reference } });
 
             return query != null && query.Any();
@@ -37,7 +38,9 @@ namespace xo.Jirabot.Data.Repositories
         public Task GetLatestRunByReference(int reference)
         {
             return
-                base.Get("SELECT Id, Status, Type, Reference, PlannedTime, ProcessedTime FROM Tasks WHERE (Status = @StatusCompleted OR Status = @StatusFailed) AND Reference = @Reference ORDER BY Id DESC", 
+                base.Get(@"SELECT Id, Status, Type, Reference, PlannedTime, ProcessedTime FROM Tasks 
+                            WHERE (Status = @StatusCompleted OR Status = @StatusFailed) AND Reference = @Reference 
+                            ORDER BY Id DESC LIMIT 1", 
                 new Dictionary<string, object>
                 {
                     { "@StatusCompleted", (int)TaskStatus.COMPLETED },
@@ -63,8 +66,8 @@ namespace xo.Jirabot.Data.Repositories
                 Status = (TaskStatus)ValueOrDefault<int>(record, "Status"),
                 Type = (TaskType)ValueOrDefault<int>(record, "Type"),
                 Reference = ValueOrDefault<int>(record, "Reference"),
-                PlannedTime = ValueOrDefault<string>(record, "PlannedTime"),
-                ProcessedTime = ValueOrDefault<string>(record, "ProcessedTime")
+                PlannedTime = ValueOrDefault<DateTime?>(record, "PlannedTime"),
+                ProcessedTime = ValueOrDefault<DateTime?>(record, "ProcessedTime")
             };
         }
     }
