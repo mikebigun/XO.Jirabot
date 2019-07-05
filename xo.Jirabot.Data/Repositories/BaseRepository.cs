@@ -34,5 +34,27 @@ namespace xo.Jirabot.Data.Repositories
         }
 
         protected abstract T MapEntity(IDataRecord record);
+
+        protected T ValueOrDefault<T>(IDataRecord record, string name)
+        {
+            if (record == null)
+            {
+                return default(T);
+            }
+
+            var index = record.GetOrdinal(name);
+
+            if (index < 0)
+            {
+                return default(T);
+            }
+
+            if (record.IsDBNull(index))
+            {
+                return default(T);
+            }
+
+            return (T)record[name];
+        }
     }
 }

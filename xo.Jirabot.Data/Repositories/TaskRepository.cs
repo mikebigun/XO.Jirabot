@@ -16,22 +16,32 @@ namespace xo.Jirabot.Data.Repositories
 
         public void CreateTask(Task task)
         {
-            base.Post("INSERT INTO Tasks (Type, Status, Reference) VALUES (@Type, @Status, @Reference)",
+            base.Post("INSERT INTO Tasks (Type, Status, Reference, PlannedTime) VALUES (@Type, @Status, @Reference, @PlannedTime)",
                 new Dictionary<string, object>
                 {
                     { "@Type", (int)task.Type },
                     { "@Status", (int)task.Status },
-                    { "@Reference", task.Reference }
+                    { "@Reference", task.Reference },
+                    { "@PlannedTime", DateTime.Now.ToString("MM/DD/YYYY HH:mm") }
                 });
         }
 
-        public Task GetLatestTaskByReference(int reference)
+        public bool IsPlanned(int reference)
+        {
+            var query = base.Get("SELECT Id WHERE Status = 'PLANNED' AND Reference = @Reference",
+                new Dictionary<string, object> { { "@Reference", reference } });
+
+            return query != null && query.Any();
+        }
+
+        public Task GetLatestRunByReference(int reference)
         {
             return
-                base.Get("SELECT Id, Status, Type, Reference, RunTicks FROM Tasks WHERE Status = @Status AND Reference = @Reference ORDER BY Id", 
+                base.Get("SELECT Id, Status, Type, Reference, PlannedTime, ProcessedTime FROM Tasks WHERE (Status = @StatusCompleted OR Status = @StatusFailed) AND Reference = @Reference ORDER BY Id DESC", 
                 new Dictionary<string, object>
                 {
-                    { "@Status", (int)TaskStatus.COMPLETED },
+                    { "@StatusCompleted", (int)TaskStatus.COMPLETED },
+                    { "@StatusFailed", (int)TaskStatus.FAILED },
                     { "@Reference", reference }
                 }).FirstOrDefault();
         }
@@ -49,11 +59,12 @@ namespace xo.Jirabot.Data.Repositories
         {
             return new Task
             {
-                Id = Convert.ToInt32(record["Id"]),
-                Status = (TaskStatus)Convert.ToInt32(record["Status"]),
-                Type = (TaskType)Convert.ToInt32(record["Type"]),
-                Reference = Convert.ToInt32(record["Reference"]),
-                RunTicks = record["RunTicks"].ToString()
+                Id = ValueOrDefault<int>(record, "Id"),
+                Status = (TaskStatus)ValueOrDefault<int>(record, "Status"),
+                Type = (TaskType)ValueOrDefault<int>(record, "Type"),
+                Reference = ValueOrDefault<int>(record, "Reference"),
+                PlannedTime = ValueOrDefault<string>(record, "PlannedTime"),
+                ProcessedTime = ValueOrDefault<string>(record, "ProcessedTime")
             };
         }
     }

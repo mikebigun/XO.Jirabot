@@ -8,10 +8,12 @@ namespace xo.Jirabot.Contracts.Repositories
 {
     public interface ITaskReporsitory : IRepository
     {
-        Task GetLatestTaskByReference(int reference);
+        Task GetLatestRunByReference(int reference);
 
         void CreateTask(Task task);
 
         void UpdateStatus(int id, TaskStatus status);
+
+        bool IsPlanned(int reference);
     }
 }

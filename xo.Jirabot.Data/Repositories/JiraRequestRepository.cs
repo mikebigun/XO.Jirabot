@@ -11,7 +11,6 @@ namespace xo.Jirabot.Data.Repositories
     {
         public JiraRequestRepository(ITargetDatabase database): base(database)
         {
-
         }
 
         public IList<JiraRequest> GetAllQueries()

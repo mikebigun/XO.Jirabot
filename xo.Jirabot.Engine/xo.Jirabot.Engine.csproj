@@ -41,6 +41,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Api\ApiClientBase.cs" />
+    <Compile Include="Api\ApiResponse.cs" />
+    <Compile Include="Api\ApiClientJira.cs" />
+    <Compile Include="Api\ApiClientMattermost.cs" />
     <Compile Include="EngineExecutor.cs" />
     <Compile Include="EngineContext.cs" />
     <Compile Include="EngineResolver.cs" />
@@ -53,6 +57,9 @@
     <Compile Include="Requests\Request.cs" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="Chronic.Signed">
+      <Version>0.3.2</Version>
+    </PackageReference>
     <PackageReference Include="Ninject">
       <Version>3.3.4</Version>
     </PackageReference>

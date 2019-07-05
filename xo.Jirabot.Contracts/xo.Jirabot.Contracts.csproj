@@ -50,6 +50,7 @@
     <Compile Include="Entities\Tasks\TaskStatus.cs" />
     <Compile Include="Entities\Tasks\Task.cs" />
     <Compile Include="Entities\Tasks\TaskType.cs" />
+    <Compile Include="Globals\Constants.cs" />
     <Compile Include="IEntity.cs" />
     <Compile Include="IRepositoryFactory.cs" />
     <Compile Include="ITargetDatabase.cs" />

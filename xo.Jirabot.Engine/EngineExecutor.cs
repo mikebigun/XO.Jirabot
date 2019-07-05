@@ -1,6 +1,4 @@
 ﻿using System;
-using xo.Jirabot.Contracts;
-using xo.Jirabot.Contracts.Entities;
 using xo.Jirabot.Contracts.Entities.Tasks;
 using xo.Jirabot.Contracts.Repositories;
 using xo.Jirabot.Engine.Helpers;
@@ -9,7 +7,7 @@ namespace xo.Jirabot.Engine
 {
     public class EngineExecutor
     {
-        private ITaskReporsitory __taskRepositor;
+        private ITaskReporsitory __taskRepository;
 
         private IJiraRequestRepository _jiraRepository;
 
@@ -17,7 +15,7 @@ namespace xo.Jirabot.Engine
 
         public EngineExecutor()
         {
-            __taskRepositor = __context.Factory.Get<ITaskReporsitory>();
+            __taskRepository = __context.Factory.Get<ITaskReporsitory>();
 
             _jiraRepository = __context.Factory.Get<IJiraRequestRepository>();
         }
@@ -26,11 +24,8 @@ namespace xo.Jirabot.Engine
         public void RunJiraObserver()
         {
             var repo = __context.Factory.Get<ITaskReporsitory>();
-
             // run jira api form tasks
-            // create mattermost task when api executed
-            
-            
+            // create mattermost task when api executed            
         }
 
         public void RunMattermostObserver()
@@ -40,34 +35,39 @@ namespace xo.Jirabot.Engine
 
         public void RunSchedulesObserver()
         {
+            // runs every min and checks Failed/Completed tasks
+            // for every completed task it gets frequency of query
+            // and creates new Planned task 
+
             var queries = _jiraRepository.GetAllQueries();
 
             if (queries != null)
             {
                 foreach (var query in queries)
                 {
-                    var task = __taskRepositor.GetLatestTaskByReference(query.Id);
-
-                    if (task == null)
+                    if (__taskRepository.IsPlanned(query.Id))
                     {
                         continue;
                     }
+                    
+                    var latestRun = __taskRepository.GetLatestRunByReference(query.Id);
 
-                    if (FrequencyHelper.MinutesDiffToNow(Convert.ToInt64(task.RunTicks)) >= 
-                        Convert.ToInt32(query.Frequency))
+                    var latestRunTime = latestRun == null ? "" : latestRun.ProcessedTime;
+
+                    var plannedRunTime = string.Empty;
+
+                    if (FrequencyHelper.IsTimeToPlan(query.Frequency, latestRunTime, out plannedRunTime))
                     {
-                        __taskRepositor.CreateTask(new Task
+                        __taskRepository.CreateTask(new Task
                         {
                             Type = TaskType.JIRA,
                             Status = TaskStatus.PLANNED,
-                            RunTicks = DateTime.Now.Ticks.ToString(),
+                            PlannedTime = plannedRunTime,
                             Reference = query.Id
                         });
                     }
                 }
             }
-
-            // create jira task for every query, (every 1 min)
         }
     }
 }

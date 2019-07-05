@@ -4,12 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace xo.Jirabot.Contracts.Entities.Tasks
+namespace xo.Jirabot.Engine.Api
 {
-    public enum TaskStatus
+    public class ApiClientJira
     {
-        PLANNED = 1,
-        COMPLETED = 2,
-        FAILED = 3
     }
 }
