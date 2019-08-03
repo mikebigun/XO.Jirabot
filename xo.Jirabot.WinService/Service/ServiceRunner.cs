@@ -80,16 +80,16 @@ namespace xo.Jirabot.WinService.Service
             {
                 new PeriodicJob
                 {
-                    Name = "Sheduled Tasks Creator",
+                    Name = "Sheduled Task Creator",
                     Action = ObserveSchedules,
-                    Period = TimeSpan.FromMinutes(30),
-                    CancelationCallback = () => OnServiceDemandCanceled()
+                    Period = TimeSpan.FromSeconds(60),
+                    CancelationCallback = () => OnServiceTaskCanceled()
                 },
                 new PeriodicJob
                 {
                     Name = "Jira Task Executor",
                     Action = ObserveJira,
-                    Period = TimeSpan.FromSeconds(30),
+                    Period = TimeSpan.FromSeconds(90),
                     CancelationCallback = () => OnServiceJiraCanceled()
                 },
                 new PeriodicJob
@@ -117,9 +117,9 @@ namespace xo.Jirabot.WinService.Service
             __engine.RunMattermostObserver();
         }
 
-        private void OnServiceDemandCanceled()
+        private void OnServiceTaskCanceled()
         {
-            __context.Logger.WriteInfo("Demand observer stopped. Service is not running.");
+            __context.Logger.WriteInfo("Task observer stopped. Service is not running.");
         }
 
         private void OnServiceJiraCanceled()

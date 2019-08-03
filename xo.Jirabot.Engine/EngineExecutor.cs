@@ -56,9 +56,7 @@ namespace xo.Jirabot.Engine
                         DateTime.Now: 
                         latestRun.ProcessedTime.Value;
 
-                    var plannedRunTime = DateTime.MinValue;
-
-                    if (FrequencyHelper.IsTimeToPlan(query.Frequency, latestRunTime, out plannedRunTime))
+                    if (FrequencyHelper.IsTimeToPlan(query.Frequency, latestRunTime, out DateTime plannedRunTime))
                     {
                         __taskRepository.CreateTask(new Task
                         {

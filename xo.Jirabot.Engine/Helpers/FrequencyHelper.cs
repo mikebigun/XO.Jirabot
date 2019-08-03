@@ -18,7 +18,7 @@ namespace xo.Jirabot.Engine.Helpers
 
             if (!planned.End.HasValue)
             {
-                throw new InvalidOperationException("Invalid planned date and time");
+                throw new InvalidOperationException("Unable to calculate planned date/time");
             }
 
             plannedRun = planned.End.Value;

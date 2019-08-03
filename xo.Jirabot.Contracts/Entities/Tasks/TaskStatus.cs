@@ -10,6 +10,7 @@ namespace xo.Jirabot.Contracts.Entities.Tasks
     {
         PLANNED = 1,
         COMPLETED = 2,
-        FAILED = 3
+        FAILED = 3,
+        CANCELED = 4
     }
 }

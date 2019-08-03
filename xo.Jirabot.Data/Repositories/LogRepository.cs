@@ -35,8 +35,8 @@ namespace xo.Jirabot.Data.Repositories
             {
                 Id = ValueOrDefault<int>(record, "Id"),
                 LogDate = ValueOrDefault<DateTime>(record, "LogDate"),
-                LogType = Convert.ToInt32(record["LogType"]),
-                LogMessage = record["LogMessage"].ToString()
+                LogType = ValueOrDefault<int>(record, "LogType"),
+                LogMessage = ValueOrDefault<string>(record, "LogMessage")
             };
             return entity;
         }
