@@ -10,6 +10,8 @@ namespace xo.Jirabot.Contracts.Repositories
     public interface IJiraRequestRepository : IRepository
     {
         IList<JiraRequest> GetAllQueries();
+
+        JiraRequest GetQueryById(int id);
     }
 
 }

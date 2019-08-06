@@ -15,5 +15,9 @@ namespace xo.Jirabot.Contracts.Repositories
         void UpdateStatus(int id, TaskStatus status);
 
         bool IsPlanned(int reference);
+
+        Task GetJiraPlanned();
+
+        Task GetMattermostPlanned();
     }
 }

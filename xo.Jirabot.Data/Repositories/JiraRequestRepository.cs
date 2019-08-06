@@ -18,6 +18,11 @@ namespace xo.Jirabot.Data.Repositories
             throw new NotImplementedException();
         }
 
+        public JiraRequest GetQueryById(int id)
+        {
+            throw new NotImplementedException();
+        }
+
         protected override JiraRequest MapEntity(IDataRecord record)
         {
             throw new NotImplementedException();

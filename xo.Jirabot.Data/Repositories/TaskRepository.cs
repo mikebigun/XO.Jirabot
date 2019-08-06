@@ -58,6 +58,28 @@ namespace xo.Jirabot.Data.Repositories
             });
         }
 
+        public Task GetJiraPlanned()
+        {
+            return base.Get(@"SELECT Id, Status, Type, Reference, PlannedTime, ProcessedTime FROM Tasks 
+                                WHERE Status = @Status AND Type = @Type", new Dictionary<string, object>
+            {
+                { "@Status", (int)TaskStatus.PLANNED },
+                { "Type", (int)TaskType.JIRA }
+
+            }).FirstOrDefault();
+        }
+
+        public Task GetMattermostPlanned()
+        {
+            return base.Get(@"SELECT Id, Status, Type, Reference, PlannedTime, ProcessedTime FROM Tasks 
+                                WHERE Status = @Status AND Type = @Type", new Dictionary<string, object>
+            {
+                { "@Status", (int)TaskStatus.PLANNED },
+                { "Type", (int)TaskType.MATTERMOST }
+
+            }).FirstOrDefault();
+        }
+
         protected override Task MapEntity(IDataRecord record)
         {
             return new Task

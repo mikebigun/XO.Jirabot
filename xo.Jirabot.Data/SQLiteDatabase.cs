@@ -14,7 +14,7 @@ namespace xo.Jirabot.Data
 
         public SQLiteDatabase()
         {
-            __connectionString = @"Data Source=C:\Work\Repo\XO.Jirabot\xo.Jirabot.Data\App_Data\xo.Jirabot.Db;Version=3;";
+            __connectionString = @"Data Source=C:\opt\XO.Jirabot\xo.Jirabot.Data\App_Data\xo.Jirabot.Db;Version=3;";
         }
 
         public int ExecuteNonQuery(string query, IDictionary<string, object> parameters)
