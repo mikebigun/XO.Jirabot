@@ -82,7 +82,7 @@ namespace xo.Jirabot.WinService.Service
                 {
                     Name = "Sheduled Task Creator",
                     Action = ObserveSchedules,
-                    Period = TimeSpan.FromSeconds(60),
+                    Period = TimeSpan.FromSeconds(10),
                     CancelationCallback = () => OnServiceTaskCanceled()
                 },
                 new PeriodicJob

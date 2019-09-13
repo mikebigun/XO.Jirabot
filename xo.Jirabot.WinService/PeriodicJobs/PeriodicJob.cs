@@ -12,7 +12,7 @@ namespace xo.Jirabot.WinService.PeriodicJobs
 
         public TimeSpan Period { get; set; }
 
-        public Action Action { get; set; }        
+        public Action Action { get; set; }
 
         public Action CancelationCallback { private get; set; }
 

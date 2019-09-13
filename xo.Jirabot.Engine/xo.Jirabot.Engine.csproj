@@ -45,20 +45,26 @@
     <Compile Include="Api\ApiResponse.cs" />
     <Compile Include="Api\ApiClientJira.cs" />
     <Compile Include="Api\ApiClientMattermost.cs" />
+    <Compile Include="Controllers\BaseController.cs" />
+    <Compile Include="Controllers\JiraController.cs" />
     <Compile Include="EngineExecutor.cs" />
     <Compile Include="EngineContext.cs" />
     <Compile Include="EngineResolver.cs" />
     <Compile Include="EngineResolverModule.cs" />
     <Compile Include="Helpers\FrequencyHelper.cs" />
     <Compile Include="Logging\Logger.cs" />
+    <Compile Include="Models\JiraConfiguration.cs" />
     <Compile Include="Observers\EngineObserver.cs" />
     <Compile Include="Observers\EngineSubject.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Requests\Request.cs" />
+    <Compile Include="Requests\JiraRequestManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Chronic.Signed">
       <Version>0.3.2</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.AspNet.WebApi.Client">
+      <Version>5.2.7</Version>
     </PackageReference>
     <PackageReference Include="Ninject">
       <Version>3.3.4</Version>

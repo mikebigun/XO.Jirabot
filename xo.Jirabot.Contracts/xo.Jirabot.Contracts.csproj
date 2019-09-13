@@ -41,6 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controllers\IJiraController.cs" />
     <Compile Include="Entities\Jira\JiraConfig.cs" />
     <Compile Include="Entities\Jira\JiraRequest.cs" />
     <Compile Include="Entities\Log\Log.cs" />

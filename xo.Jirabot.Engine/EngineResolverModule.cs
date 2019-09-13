@@ -1,8 +1,10 @@
 ﻿using Ninject.Modules;
 using xo.Jirabot.Contracts;
+using xo.Jirabot.Contracts.Controllers;
 using xo.Jirabot.Contracts.Logging;
 using xo.Jirabot.Contracts.Observer;
 using xo.Jirabot.Data;
+using xo.Jirabot.Engine.Controllers;
 using xo.Jirabot.Engine.Logging;
 using xo.Jirabot.Engine.Observers;
 
@@ -20,6 +22,7 @@ namespace xo.Jirabot.Engine
             Bind<ILogger>().To<Logger>();
             Bind<IServiceSubject>().To<EngineSubject>();
             Bind<IServiceObserver>().To<EngineObserver>();
+            Bind<IJiraController>().To<JiraController>();
         }
     }
 }

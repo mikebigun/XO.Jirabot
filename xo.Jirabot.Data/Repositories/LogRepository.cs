@@ -31,14 +31,13 @@ namespace xo.Jirabot.Data.Repositories
 
         protected override Log MapEntity(IDataRecord record)
         {
-            var entity = new Log
+            return new Log
             {
                 Id = ValueOrDefault<int>(record, "Id"),
                 LogDate = ValueOrDefault<DateTime>(record, "LogDate"),
                 LogType = ValueOrDefault<int>(record, "LogType"),
                 LogMessage = ValueOrDefault<string>(record, "LogMessage")
             };
-            return entity;
         }
     }
 }
